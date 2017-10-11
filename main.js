@@ -6,18 +6,15 @@
 // @author       Sunness
 // ==/UserScript==
 
-var threshold = 2400;
-var delay = 1500;
-var exist = true;
-var running = false;
+let threshold = 2400, delay = 1500, exist = true, running = false;
 
-window.addEventListener('scroll', function(e) {
-    if (exist && !running && (document.body.scrollHeight - document.body.scrollTop < threshold)) {
+window.addEventListener('scroll', e => {
+    if (exist && !running && (document.documentElement.scrollHeight - document.documentElement.scrollTop < threshold)) {
         running = true;
-        var a = document.querySelector("a.uitxt1[title=加载下一页]");
+        let a = document.querySelector("a.uitxt1[title=加载下一页]");
         if (a !== null) {
             a.click();
-            setTimeout(function() { running = false; }, delay);
+            setTimeout(() => { running = false; }, delay);
         } else {
             exist = false;
         }
