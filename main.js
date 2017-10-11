@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         NGA Auto Pager V2
-// @version      1.00
+// @version      1.01
 // @description  NGA自动翻页插件
 // @include      /^http:\/\/(bbs\.ngacn\.cc|nga\.178\.com|bbs\.nga\.cn|bbs\.bigccq\.cn)\/(read\.php|thread\.php)/
 // @author       Sunness
