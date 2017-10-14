@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         NGA Auto Pager V2
-// @version      1.01
+// @version      1.02
 // @description  NGA自动翻页插件
-// @include      /^http:\/\/(bbs\.ngacn\.cc|nga\.178\.com|bbs\.nga\.cn|bbs\.bigccq\.cn)\/(read\.php|thread\.php|wow|wow\/pvp|wow\/pve|wow\/rogue|wow\/druid|wow\/dk|wow\/mage|wow\/monk|wow\/priest|wow\/shaman|wow\/paladin|wow\/warrior|wow\/warlock|wow\/hunter|wow\/ui|wow\/lore|it|auto|ink|ng2|play|tvgame|wa2|wow\/justice|wow\/job|ccq|gw2|bns|heroes|lol|hs|wot|wowp|wows|jx3|coc|pad|d3|dota|wt|ff14|poi|gta|sc|ow|cr|king)/
+// @include      /^http(s):\/\/(bbs\.ngacn\.cc|nga\.178\.com|bbs\.nga\.cn|bbs\.bigccq\.cn)\/(read\.php|thread\.php|wow|wow\/pvp|wow\/pve|wow\/rogue|wow\/druid|wow\/dk|wow\/mage|wow\/monk|wow\/priest|wow\/shaman|wow\/paladin|wow\/warrior|wow\/warlock|wow\/hunter|wow\/ui|wow\/lore|it|auto|ink|ng2|play|tvgame|wa2|wow\/justice|wow\/job|ccq|gw2|bns|heroes|lol|hs|wot|wowp|wows|jx3|coc|pad|d3|dota|wt|ff14|poi|gta|sc|ow|cr|king)/
 // @author       Sunness
 // ==/UserScript==
 
