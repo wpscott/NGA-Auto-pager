@@ -201,10 +201,17 @@
 // @author      Sunness
 // ==/UserScript==
 
-let threshold = 2400;
+let threshold = 2400, delay = 1500, exist = true, running = false;
 
 window.addEventListener('scroll', e => {
-    if (document.documentElement.scrollHeight - document.documentElement.scrollTop < threshold) {
-        commonui.loadReadHidden(1, 2);
+    if (exist && !running && (document.documentElement.scrollHeight - document.documentElement.scrollTop < threshold)) {
+        running = true;
+        let a = document.querySelector("a.uitxt1[title=加载下一页]");
+        if (a !== null) {
+            commonui.loadReadHidden(1, 2);
+            setTimeout(() => { running = false; }, delay);
+        } else {
+            exist = false;
+        }
     }
 });
