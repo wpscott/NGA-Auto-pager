@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name        NGA Auto Pager V2
-// @version     1.04
-// @description NGA自动翻页插件。由于js_forum.js:1091行对页数的限制，此插件只能自动加载前10页。
+// @name        NGA Auto Pager V3
+// @version     2.0
+// @description NGA自动翻页插件
 // @match		http*://bbs.ngacn.cc/read.php*
 // @match		http*://nga.178.com/read.php*
 // @match		http*://bbs.nga.cn/read.php*
@@ -201,15 +201,50 @@
 // @author      Sunness
 // ==/UserScript==
 
-let threshold = 2400, delay = 1500, exist = true, running = false;
+const css = document.createElement('style');
+css.innerHTML = "#snackbar {visibility: hidden;min-width: 100px;margin-left: -125px;background-color: #333;color: #fff;text-align: center;border-radius: 6px;padding: 12px;position: fixed;z-index: 1;left: 99%;bottom: 30px;}#snackbar.show {visibility: visible;-webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;animation: fadein 0.5s, fadeout 0.5s 2.5s;}@-webkit-keyframes fadein {from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;}}@keyframes fadein {from {bottom: 0; opacity: 0;}to {bottom: 30px; opacity: 1;}}@-webkit-keyframes fadeout {from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;}}@keyframes fadeout {from {bottom: 30px; opacity: 1;}to {bottom: 0; opacity: 0;}}";
+const snackbar = document.createElement('div');
+snackbar.setAttribute('id', 'snackbar');
+document.getElementsByTagName('body')[0].appendChild(css);
+document.getElementsByTagName('body')[0].appendChild(snackbar);
 
-window.addEventListener('scroll', e => {
+const ip =  __PAGE[2], threshold = 3000, opt = __PAGE[0].indexOf("/read") === 0 ? 2 : 1026;
+let exist = true, running = false;
+
+window.addEventListener('scroll', async () => {
     if (exist && !running && (document.documentElement.scrollHeight - document.documentElement.scrollTop < threshold)) {
         running = true;
-        let a = document.querySelector("a.uitxt1[title=加载下一页]");
+        const sb = document.getElementById("snackbar");
+        sb.innerHTML = `正在加载第${__PAGE[2] + 1}页`;
+        sb.className = 'show';
+        setTimeout(() => sb.className = "", 3000);
+        const a = document.querySelector("a.uitxt1[title=加载下一页]");
         if (a !== null) {
-            commonui.loadReadHidden(1, 2);
-            setTimeout(() => { running = false; }, delay);
+            const res = await fetch(`${__PAGE[0]}&page=${__PAGE[2] + 1}`, {credentials: "same-origin"});
+            const fr = new FileReader();
+
+            fr.addEventListener('loadend', () => {
+                const data = pr(fr.result, opt);
+                const c = data[1].match(/\s*<tbody/) ? _$('/table') : _$('/span');
+                const pb = document.getElementsByName('pageball');
+                const iPc = $('m_posts_c') || $('topicrows');
+
+                eval(data[0]);
+
+                c.innerHTML = data[1];
+                c.childNodes.forEach(n => {if (((opt & 1024) && (n.nodeName == "TBODY")) || (n.className == "forumbox postbox")) iPc.insertBefore(n, null);});
+
+                data[2].forEach(d => eval(d));
+
+                __PAGE[2]++;
+
+                commonui.pageBtn(pb[0], {0: __PAGE[0], 1: __PAGE[1], 2: ip, 3: __PAGE[3]}, 4|16);
+                commonui.pageBtn(pb[1], {0: __PAGE[0], 1: __PAGE[1], 2: __PAGE[2], 3: __PAGE[3]}, 2|8);
+
+                running = false;
+            });
+
+            fr.readAsText(await res.blob(), "gbk");
         } else {
             exist = false;
         }
