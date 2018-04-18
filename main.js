@@ -214,12 +214,13 @@ let exist = true, running = false;
 window.addEventListener('scroll', async () => {
     if (exist && !running && (document.documentElement.scrollHeight - document.documentElement.scrollTop < threshold)) {
         running = true;
-        const sb = document.getElementById("snackbar");
-        sb.innerHTML = `正在加载第${__PAGE[2] + 1}页`;
-        sb.className = 'show';
-        setTimeout(() => sb.className = "", 3000);
         const a = document.querySelector("a.uitxt1[title=加载下一页]");
         if (a !== null) {
+            const sb = document.getElementById("snackbar");
+            sb.innerHTML = `正在加载第${__PAGE[2] + 1}页`;
+            sb.className = 'show';
+            setTimeout(() => sb.className = "", 3000);
+            
             const res = await fetch(`${__PAGE[0]}&page=${__PAGE[2] + 1}`, {credentials: "same-origin"});
             const fr = new FileReader();
 
