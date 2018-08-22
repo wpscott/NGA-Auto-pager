@@ -199,19 +199,40 @@
 // @match		http*://bbs.nga.cn/king*
 // @match		http*://bbs.bigccq.cn/king*
 // @author      Sunness
+// @namespace https://greasyfork.org/users/63731
 // ==/UserScript==
 
-const css = document.createElement('style');
-css.innerHTML = "#snackbar {visibility: hidden;min-width: 100px;margin-left: -125px;background-color: #333;color: #fff;text-align: center;border-radius: 6px;padding: 12px;position: fixed;z-index: 1;left: 99%;bottom: 30px;}#snackbar.show {visibility: visible;-webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;animation: fadein 0.5s, fadeout 0.5s 2.5s;}@-webkit-keyframes fadein {from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;}}@keyframes fadein {from {bottom: 0; opacity: 0;}to {bottom: 30px; opacity: 1;}}@-webkit-keyframes fadeout {from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;}}@keyframes fadeout {from {bottom: 30px; opacity: 1;}to {bottom: 0; opacity: 0;}}";
+const snackbar_css = document.createElement('style');
+snackbar_css.innerHTML = "#snackbar {visibility: hidden;background-color: #333;color: #fff;text-align: center;border-radius: 6px;padding: 12px;position: fixed;right: 50px;bottom: 30px;}#snackbar.show {visibility: visible;-webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;animation: fadein 0.5s, fadeout 0.5s 2.5s;}@-webkit-keyframes fadein {from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;}}@keyframes fadein {from {bottom: 0; opacity: 0;}to {bottom: 30px; opacity: 1;}}@-webkit-keyframes fadeout {from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;}}@keyframes fadeout {from {bottom: 30px; opacity: 1;}to {bottom: 0; opacity: 0;}}";
 const snackbar = document.createElement('div');
 snackbar.setAttribute('id', 'snackbar');
-document.getElementsByTagName('body')[0].appendChild(css);
+document.getElementsByTagName('body')[0].appendChild(snackbar_css);
 document.getElementsByTagName('body')[0].appendChild(snackbar);
+const backToTop = document.createElement('a');
+backToTop.setAttribute('id', 'btt');
+const backToTop_css = document.createElement('style');
+backToTop_css.innerHTML="#btt {visibility: hidden;background: #333 url('data:image/svg+xml;utf8,<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\" width=\"16px\" height=\"16px\" viewBox=\"0 0 16 16\" enable-background=\"new 0 0 16 16\" xml:space=\"preserve\"><polygon fill=\"#FFFFFF\" points=\"8,2.8 16,10.7 13.6,13.1 8.1,7.6 2.5,13.2 0,10.7 \"/></svg>') no-repeat center 50%;color: #fff;text-align: center;border-radius: 6px;padding: 8px;position: fixed;right: 30px;bottom: 72px;height: 16px; width: 16px;}#btt.show {visibility: visible;}body {scroll-behavior: smooth;}";
+document.getElementsByTagName('body')[0].appendChild(backToTop_css);
+document.getElementsByTagName('body')[0].appendChild(backToTop);
 
-const ip =  __PAGE[2], threshold = 3000, opt = __PAGE[0].indexOf("/read") === 0 ? 2 : 1026;
+const ip = __PAGE[2], threshold = 3000, opt = __PAGE[0].indexOf("/read") === 0 ? 2 : 1026, topPosition = document.getElementById("topicrows") ? 921 : 321;
 let exist = true, running = false;
 
+backToTop.addEventListener('click', event => {
+    event.preventDefault();
+    window.scrollTo({
+      top: topPosition,
+      left: 0,
+      behavior: 'smooth'
+    });
+});
+
 window.addEventListener('scroll', async () => {
+    if (document.documentElement.scrollTop < 1000) {
+        backToTop.className = "";
+    } else {
+        backToTop.className = 'show';
+    }
     if (exist && !running && (document.documentElement.scrollHeight - document.documentElement.scrollTop < threshold)) {
         running = true;
         const a = document.querySelector("a.uitxt1[title=加载下一页]");
@@ -219,8 +240,8 @@ window.addEventListener('scroll', async () => {
             const sb = document.getElementById("snackbar");
             sb.innerHTML = `正在加载第${__PAGE[2] + 1}页`;
             sb.className = 'show';
-            setTimeout(() => sb.className = "", 3000);
-            
+            setTimeout(() => {sb.className = ""}, 3000);
+
             const res = await fetch(`${__PAGE[0]}&page=${__PAGE[2] + 1}`, {credentials: "same-origin"});
             const fr = new FileReader();
 
