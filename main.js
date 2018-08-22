@@ -215,7 +215,7 @@ backToTop_css.innerHTML="#btt {visibility: hidden;background: #333 url('data:ima
 document.getElementsByTagName('body')[0].appendChild(backToTop_css);
 document.getElementsByTagName('body')[0].appendChild(backToTop);
 
-const ip = __PAGE[2], threshold = 3000, opt = __PAGE[0].indexOf("/read") === 0 ? 2 : 1026, topPosition = document.getElementById("topicrows") ? 921 : 321;
+const ip = __PAGE[2], threshold = 3000, opt = __PAGE[0].indexOf("/read") === 0 ? 2 : 1026, topPosition = Math.floor((document.getElementById("topicrows") || document.getElementById("m_posts")).getBoundingClientRect().top + window.scrollY);
 let exist = true, running = false;
 
 backToTop.addEventListener('click', event => {
