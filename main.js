@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        NGA Auto Pager V2
-// @version     2.0
+// @version     2.1
 // @description NGA自动翻页插件
 // @match		http*://bbs.ngacn.cc/read.php*
 // @match		http*://nga.178.com/read.php*
@@ -215,8 +215,12 @@ backToTop_css.innerHTML="#btt {visibility: hidden;background: #333 url('data:ima
 document.getElementsByTagName('body')[0].appendChild(backToTop_css);
 document.getElementsByTagName('body')[0].appendChild(backToTop);
 
-const ip = __PAGE[2], threshold = 3000, opt = __PAGE[0].indexOf("/read") === 0 ? 2 : 1026, topPosition = Math.floor((document.getElementById("topicrows") || document.getElementById("m_posts")).getBoundingClientRect().top + window.scrollY);
-let exist = true, running = false;
+let exist = false, running = false;
+if(typeof __PAGE !== "undefined"){
+    const ip = __PAGE[2], opt = __PAGE[0].indexOf("/read") === 0 ? 2 : 1026;
+    exist = true;
+}
+const threshold = 3000, topPosition = Math.round((document.getElementById("topicrows") || document.getElementById("m_posts")).getBoundingClientRect().top + window.scrollY);
 
 backToTop.addEventListener('click', event => {
     event.preventDefault();
