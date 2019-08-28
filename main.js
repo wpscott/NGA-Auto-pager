@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        NGA Auto Pager V2
-// @version     2.34
+// @version     2.36
 // @description NGA自动翻页插件
 // @match *://bbs.nga.cn/read.php*
 // @match *://bbs.nga.cn/thread.php*
